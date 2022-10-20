@@ -1,7 +1,7 @@
 apiVersion: influxdata.com/v2alpha1
 kind: Label
 metadata:
-    name: peaceful-jones-114001
+    name: wizardly-kapitsa-ee8001
 spec:
     color: '#6BDFFF'
     name: InfluxDays
@@ -9,11 +9,11 @@ spec:
 apiVersion: influxdata.com/v2alpha1
 kind: Bucket
 metadata:
-    name: confident-goldberg-114005
+    name: confident-shtern-ee8005
 spec:
     associations:
         - kind: Label
-          name: peaceful-jones-114001
+          name: wizardly-kapitsa-ee8001
     name: global
     retentionRules:
         - everySeconds: 2.592e+06
@@ -23,11 +23,11 @@ spec:
 apiVersion: influxdata.com/v2alpha1
 kind: Dashboard
 metadata:
-    name: shiny-meitner-114001
+    name: agitated-bartik-ee8001
 spec:
     associations:
         - kind: Label
-          name: peaceful-jones-114001
+          name: wizardly-kapitsa-ee8001
     charts:
         - height: 1
           kind: Markdown
@@ -43,15 +43,9 @@ spec:
               name: "y"
               scale: linear
           colorMapping:
-            load-machine_data-bf8c01700c16-machine1-undefined-machine/machine1-factory1-mean-: rgb(255, 126, 39)
-            load-machine_data-bf8c01700c16-machine2-undefined-machine/machine2-factory1-mean-: rgb(78, 145, 226)
-            load-machine_data-bf8c01700c16-machine3-undefined-machine/machine3-factory1-mean-: rgb(209, 70, 101)
-            load-machine_data-c8f22e76cdc9-machine1-Bennett and Sons-machine/machine1-undefined-mean-: rgb(161, 53, 158)
-            load-machine_data-c8f22e76cdc9-machine2-Parker, Lambert and Alvarado-machine/machine2-undefined-mean-: rgb(49, 192, 246)
-            load-machine_data-c8f22e76cdc9-machine3-Boyd, Smith and Williams-machine/machine3-undefined-mean-: rgb(232, 95, 70)
-            load-machine_data-e469ec892ef8-machine1-Reese and Sons-machine/machine1-undefined-mean-: rgb(106, 103, 205)
-            load-machine_data-e469ec892ef8-machine2-Anderson, Williams and Andrews-machine/machine2-undefined-mean-: rgb(186, 54, 130)
-            load-machine_data-e469ec892ef8-machine3-Harris-Gallegos-machine/machine3-undefined-mean-: rgb(134, 70, 182)
+            load-machine_data-factory1-26c162785e6a-machine1-Green-Dixon-machine/machine1-mean-: '#A500A5'
+            load-machine_data-factory1-26c162785e6a-machine2-Perkins, Hill and Wright-machine/machine2-mean-: '#31C0F6'
+            load-machine_data-factory1-26c162785e6a-machine3-Bender, Schmidt and Clark-machine/machine3-mean-: '#FF7E27'
           colorizeRows: true
           colors:
             - hex: '#31C0F6'
@@ -142,15 +136,9 @@ spec:
               name: "y"
               scale: linear
           colorMapping:
-            power-machine_data-factory1-bf8c01700c16-machine1-machine/machine1-undefined-mean-: rgb(49, 192, 246)
-            power-machine_data-factory1-bf8c01700c16-machine2-machine/machine2-undefined-mean-: rgb(255, 126, 39)
-            power-machine_data-factory1-bf8c01700c16-machine3-machine/machine3-undefined-mean-: rgb(78, 145, 226)
-            power-machine_data-undefined-c8f22e76cdc9-machine1-machine/machine1-Bennett and Sons-mean-: rgb(186, 54, 130)
-            power-machine_data-undefined-c8f22e76cdc9-machine2-machine/machine2-Parker, Lambert and Alvarado-mean-: rgb(232, 95, 70)
-            power-machine_data-undefined-c8f22e76cdc9-machine3-machine/machine3-Boyd, Smith and Williams-mean-: rgb(209, 70, 101)
-            power-machine_data-undefined-e469ec892ef8-machine1-machine/machine1-Reese and Sons-mean-: rgb(161, 53, 158)
-            power-machine_data-undefined-e469ec892ef8-machine2-machine/machine2-Anderson, Williams and Andrews-mean-: rgb(134, 70, 182)
-            power-machine_data-undefined-e469ec892ef8-machine3-machine/machine3-Harris-Gallegos-mean-: rgb(106, 103, 205)
+            power-machine_data-factory1-26c162785e6a-machine1-Green-Dixon-machine/machine1-mean-: '#31C0F6'
+            power-machine_data-factory1-26c162785e6a-machine2-Perkins, Hill and Wright-machine/machine2-mean-: '#FF7E27'
+            power-machine_data-factory1-26c162785e6a-machine3-Bender, Schmidt and Clark-machine/machine3-mean-: '#A500A5'
           colorizeRows: true
           colors:
             - hex: '#31C0F6'
@@ -203,15 +191,9 @@ spec:
               name: "y"
               scale: linear
           colorMapping:
-            temperature-machine_data-factory1-bf8c01700c16-machine1-machine/machine1-undefined-mean-: rgb(78, 145, 226)
-            temperature-machine_data-factory1-bf8c01700c16-machine2-machine/machine2-undefined-mean-: rgb(255, 126, 39)
-            temperature-machine_data-factory1-bf8c01700c16-machine3-machine/machine3-undefined-mean-: rgb(49, 192, 246)
-            temperature-machine_data-undefined-c8f22e76cdc9-machine1-machine/machine1-Bennett and Sons-mean-: rgb(232, 95, 70)
-            temperature-machine_data-undefined-c8f22e76cdc9-machine2-machine/machine2-Parker, Lambert and Alvarado-mean-: rgb(186, 54, 130)
-            temperature-machine_data-undefined-c8f22e76cdc9-machine3-machine/machine3-Boyd, Smith and Williams-mean-: rgb(209, 70, 101)
-            temperature-machine_data-undefined-e469ec892ef8-machine1-machine/machine1-Reese and Sons-mean-: rgb(134, 70, 182)
-            temperature-machine_data-undefined-e469ec892ef8-machine2-machine/machine2-Anderson, Williams and Andrews-mean-: rgb(161, 53, 158)
-            temperature-machine_data-undefined-e469ec892ef8-machine3-machine/machine3-Harris-Gallegos-mean-: rgb(106, 103, 205)
+            temperature-machine_data-factory1-26c162785e6a-machine1-Green-Dixon-machine/machine1-mean-: '#A500A5'
+            temperature-machine_data-factory1-26c162785e6a-machine2-Perkins, Hill and Wright-machine/machine2-mean-: '#FF7E27'
+            temperature-machine_data-factory1-26c162785e6a-machine3-Bender, Schmidt and Clark-machine/machine3-mean-: '#31C0F6'
           colorizeRows: true
           colors:
             - hex: '#31C0F6'
@@ -264,15 +246,9 @@ spec:
               name: "y"
               scale: linear
           colorMapping:
-            vibration-machine_data-bf8c01700c16-machine1-undefined-machine/machine1-factory1-mean-: rgb(78, 145, 226)
-            vibration-machine_data-bf8c01700c16-machine2-undefined-machine/machine2-factory1-mean-: rgb(134, 70, 182)
-            vibration-machine_data-bf8c01700c16-machine3-undefined-machine/machine3-factory1-mean-: rgb(232, 95, 70)
-            vibration-machine_data-c8f22e76cdc9-machine1-Bennett and Sons-machine/machine1-undefined-mean-: rgb(106, 103, 205)
-            vibration-machine_data-c8f22e76cdc9-machine2-Parker, Lambert and Alvarado-machine/machine2-undefined-mean-: rgb(209, 70, 101)
-            vibration-machine_data-c8f22e76cdc9-machine3-Boyd, Smith and Williams-machine/machine3-undefined-mean-: rgb(186, 54, 130)
-            vibration-machine_data-e469ec892ef8-machine1-Reese and Sons-machine/machine1-undefined-mean-: rgb(49, 192, 246)
-            vibration-machine_data-e469ec892ef8-machine2-Anderson, Williams and Andrews-machine/machine2-undefined-mean-: rgb(255, 126, 39)
-            vibration-machine_data-e469ec892ef8-machine3-Harris-Gallegos-machine/machine3-undefined-mean-: rgb(161, 53, 158)
+            vibration-machine_data-factory1-26c162785e6a-machine1-Green-Dixon-machine/machine1-mean-: '#FF7E27'
+            vibration-machine_data-factory1-26c162785e6a-machine2-Perkins, Hill and Wright-machine/machine2-mean-: '#A500A5'
+            vibration-machine_data-factory1-26c162785e6a-machine3-Bender, Schmidt and Clark-machine/machine3-mean-: '#31C0F6'
           colorizeRows: true
           colors:
             - hex: '#31C0F6'
@@ -383,7 +359,7 @@ spec:
           legendColorizeRows: true
           legendOpacity: 1
           legendOrientationThreshold: 1e+08
-          name: Vibration Anomalies
+          name: Machine Anomalies
           opacity: 1
           orientationThreshold: 1e+08
           position: overlaid
