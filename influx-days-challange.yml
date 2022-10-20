@@ -1,0 +1,402 @@
+apiVersion: influxdata.com/v2alpha1
+kind: Label
+metadata:
+    name: peaceful-jones-114001
+spec:
+    color: '#6BDFFF'
+    name: InfluxDays
+---
+apiVersion: influxdata.com/v2alpha1
+kind: Bucket
+metadata:
+    name: confident-goldberg-114005
+spec:
+    associations:
+        - kind: Label
+          name: peaceful-jones-114001
+    name: global
+    retentionRules:
+        - everySeconds: 2.592e+06
+          type: expire
+    storageType: ""
+---
+apiVersion: influxdata.com/v2alpha1
+kind: Dashboard
+metadata:
+    name: shiny-meitner-114001
+spec:
+    associations:
+        - kind: Label
+          name: peaceful-jones-114001
+    charts:
+        - height: 1
+          kind: Markdown
+          name: Name this Cell
+          note: '## Raw Data'
+          staticLegend: {}
+          width: 6
+        - axes:
+            - base: "10"
+              name: x
+              scale: linear
+            - base: "10"
+              name: "y"
+              scale: linear
+          colorMapping:
+            load-machine_data-bf8c01700c16-machine1-undefined-machine/machine1-factory1-mean-: rgb(255, 126, 39)
+            load-machine_data-bf8c01700c16-machine2-undefined-machine/machine2-factory1-mean-: rgb(78, 145, 226)
+            load-machine_data-bf8c01700c16-machine3-undefined-machine/machine3-factory1-mean-: rgb(209, 70, 101)
+            load-machine_data-c8f22e76cdc9-machine1-Bennett and Sons-machine/machine1-undefined-mean-: rgb(161, 53, 158)
+            load-machine_data-c8f22e76cdc9-machine2-Parker, Lambert and Alvarado-machine/machine2-undefined-mean-: rgb(49, 192, 246)
+            load-machine_data-c8f22e76cdc9-machine3-Boyd, Smith and Williams-machine/machine3-undefined-mean-: rgb(232, 95, 70)
+            load-machine_data-e469ec892ef8-machine1-Reese and Sons-machine/machine1-undefined-mean-: rgb(106, 103, 205)
+            load-machine_data-e469ec892ef8-machine2-Anderson, Williams and Andrews-machine/machine2-undefined-mean-: rgb(186, 54, 130)
+            load-machine_data-e469ec892ef8-machine3-Harris-Gallegos-machine/machine3-undefined-mean-: rgb(134, 70, 182)
+          colorizeRows: true
+          colors:
+            - hex: '#31C0F6'
+              id: y5gMaI_qULQEbZMk7QnDs
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#A500A5'
+              id: nC5Jo5rcfGM2ZXeDsH2yU
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#FF7E27'
+              id: XJx7Lu-q4SGZv0MYBzsMQ
+              name: Nineteen Eighty Four
+              type: scale
+          geom: line
+          height: 3
+          hoverDimension: auto
+          kind: Xy
+          legendColorizeRows: true
+          legendOpacity: 1
+          legendOrientationThreshold: 1e+08
+          name: Load
+          opacity: 1
+          orientationThreshold: 1e+08
+          position: overlaid
+          queries:
+            - query: |-
+                from(bucket: "global")
+                  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_data")
+                  |> filter(fn: (r) => r["_field"] == "load")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+          staticLegend:
+            colorizeRows: true
+            opacity: 1
+            orientationThreshold: 1e+08
+            widthRatio: 1
+          width: 2
+          widthRatio: 1
+          xCol: _time
+          yCol: _value
+          yPos: 1
+        - height: 1
+          kind: Markdown
+          name: Name this Cell (Clone) (Clone) (Clone) (Clone)
+          staticLegend: {}
+          width: 12
+          yPos: 4
+        - height: 7
+          kind: Markdown
+          name: Name this Cell (Clone) (Clone) (Clone)
+          note: "### Stage 1: Determine Machine state\nYour first task is to establish the state of each machine. The main issue is that the machines are not reporting their state. The machine engineer said we can use the `vibration` field to determine the state of the machine. \n\n> If the vibration is less than 200 the machine should be flagged as `RUNNING`. If the vibration is equal to 0 the machine is considered to be in the `OFF` state. Any other vibration reading should be marked `FAULT`.\n\nComplete the two visualizations:\n1. `Machine Operationl State` - This visualization should show the state of each machine. Based on the above quote from the site engineer.\n2. `Machine State Percentage` - This visualization should show the percentage time a machine is in each state. \n\n[This page should help you get started](https://docs.influxdata.com/influxdb/cloud/query-data/common-queries/iot-common-queries/)"
+          staticLegend: {}
+          width: 6
+          yPos: 5
+        - height: 1
+          kind: Markdown
+          name: Name this Cell (Clone) (Clone) (Clone)
+          staticLegend: {}
+          width: 12
+          yPos: 12
+        - height: 6
+          kind: Markdown
+          name: Name this Cell (Clone) (Clone)
+          note: "\n### Stage 2: Determine which machine is anomalous\nWhile creating [threshold checks](https://docs.influxdata.com/influxdb/cloud/monitor-alert/checks/create/#threshold-check) with InfluxDB is relatively straightforward, for this challenge we'll be using the [Median Absolute Deviation](https://www.influxdata.com/blog/anomaly-detection-with-median-absolute-deviation/) (MAD) algorithm to determine whether or not point in a series is anomalous.  This algorithm is used to determine when a series is \"deviating from the pack\". For this exercise we'll assume that all the machines should be reporting similar metrics. Your job is to write a Flux task that:\n1. Queries your temperature data from all 3 machines.\n2. Uses the [anomalydetection.mad()] function to determine if a point from one machine is anomalous relative to other points from other machines at each time interval. \n3. Filter for where `r.level == \"anomaly\"`.\n4. Group by machineID. \n5. Count the number of anomalous points.\n6. Define a frequency of anomalous points that makes the machine anomalous. For example, if the `anomalydetection.mad()` function tags 1 point as anomalous for 1 series for an entire hour, do you consider that series anomalous? *Note: Don't worry about setting a threshold for this function. You can play with it if you want, or you can just use the default.* \n7. Write a function that sends an alert to slack if a single machine exhibits more than x anomalous points over a task `every` range. For the sake of triggering an alert you can make this anoumouls point count threshold small.  \n8. Make sure to include \n\nTo create this Flux task I recommend splitting the work into two parts: \n1. Query and calculate.\n2. Send Slack notifciaton. \n3. Combine and convert to a task. "
+          staticLegend: {}
+          width: 6
+          yPos: 13
+        - height: 1
+          kind: Markdown
+          name: Name this Cell (Clone) (Clone) (Clone) (Clone)
+          staticLegend: {}
+          width: 12
+          yPos: 19
+        - height: 11
+          kind: Markdown
+          name: Name this Cell (Clone) (Clone) (Clone)
+          note: "### Stage 3: Create a Flux alerting task\n\n#### Query and calculate. \n1. Queries your temperature data from all 3 machines.\n2. Uses the [anomalydetection.mad()] function to determine if a point from one machine is anomalous relative to other points from other machines at each time interval. \n3. Filter for where `r.level == \"anomaly\"`.\n4. Group by machineID. \n5. Count the number of anomalous points.flux \n\n#### Send Slack notification. \n1. Join the #notifciations-testing channel in the InfluxData Community slack channel. \n2. Grab the Slack Webhook URL from the channel topic or `https://hooks.slack.com/services/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`\n3. **Optional.** Test sending a Slack Notification succesfully. Edit the message to make it unique, so you can correctly identify your alert. Use the [slack.message()](https://docs.influxdata.com/flux/v0.x/stdlib/slack/message/) function. For exampe:\n   ```\n   import \"slack\" \n\n   numericalValue = 42\n   \n   slack.message(url: \"https://hooks.slack.com/services/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\", channel: \"#notifications-testing\", text: \"This is a message from the Flux slack.message() function the value is ${numericalValue}.\", color: \"warning\")\n   ```\n\n#### Combine and convert to a task. \n1. Make sure that all your package imports are at the top of your task. As a review, they should include: \n   ``` \n   import \"contrib/anaisdg/anomalydetection\"\n   import \"slack\"\n   import\n   ```\n1. Include your task options. Run your task every 5 minutes. Make sure to include a small offset to avoid any read/write conflicts. As a review this should look something like:\n   ```\n   option task = { name: \"Anomalous Machine Alert\", every: 5m, offset: 30s }\n   ```\n2. Add your query\n3. Filter for an acceptable count of anomalous points over that time range. *Note: you can make this filter very low to just trigger an alert.* \n4. Include a message with \n5. Use a map function to trigger the slack message for every row where your count is over your threshold. Make sure to use string interpolation, as in the example above. Make sure your message includes: your name, the number of anomalous points, and the machineID. "
+          staticLegend: {}
+          width: 12
+          yPos: 20
+        - axes:
+            - base: "10"
+              name: x
+              scale: linear
+            - base: "10"
+              name: "y"
+              scale: linear
+          colorMapping:
+            power-machine_data-factory1-bf8c01700c16-machine1-machine/machine1-undefined-mean-: rgb(49, 192, 246)
+            power-machine_data-factory1-bf8c01700c16-machine2-machine/machine2-undefined-mean-: rgb(255, 126, 39)
+            power-machine_data-factory1-bf8c01700c16-machine3-machine/machine3-undefined-mean-: rgb(78, 145, 226)
+            power-machine_data-undefined-c8f22e76cdc9-machine1-machine/machine1-Bennett and Sons-mean-: rgb(186, 54, 130)
+            power-machine_data-undefined-c8f22e76cdc9-machine2-machine/machine2-Parker, Lambert and Alvarado-mean-: rgb(232, 95, 70)
+            power-machine_data-undefined-c8f22e76cdc9-machine3-machine/machine3-Boyd, Smith and Williams-mean-: rgb(209, 70, 101)
+            power-machine_data-undefined-e469ec892ef8-machine1-machine/machine1-Reese and Sons-mean-: rgb(161, 53, 158)
+            power-machine_data-undefined-e469ec892ef8-machine2-machine/machine2-Anderson, Williams and Andrews-mean-: rgb(134, 70, 182)
+            power-machine_data-undefined-e469ec892ef8-machine3-machine/machine3-Harris-Gallegos-mean-: rgb(106, 103, 205)
+          colorizeRows: true
+          colors:
+            - hex: '#31C0F6'
+              id: y5gMaI_qULQEbZMk7QnDs
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#A500A5'
+              id: nC5Jo5rcfGM2ZXeDsH2yU
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#FF7E27'
+              id: XJx7Lu-q4SGZv0MYBzsMQ
+              name: Nineteen Eighty Four
+              type: scale
+          geom: line
+          height: 3
+          hoverDimension: auto
+          kind: Xy
+          legendColorizeRows: true
+          legendOpacity: 1
+          legendOrientationThreshold: 1e+08
+          name: Power
+          opacity: 1
+          orientationThreshold: 1e+08
+          position: overlaid
+          queries:
+            - query: |-
+                from(bucket: "global")
+                  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_data")
+                  |> filter(fn: (r) => r["_field"] == "power")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+          staticLegend:
+            colorizeRows: true
+            opacity: 1
+            orientationThreshold: 1e+08
+            widthRatio: 1
+          width: 2
+          widthRatio: 1
+          xCol: _time
+          xPos: 2
+          yCol: _value
+          yPos: 1
+        - axes:
+            - base: "10"
+              name: x
+              scale: linear
+            - base: "10"
+              name: "y"
+              scale: linear
+          colorMapping:
+            temperature-machine_data-factory1-bf8c01700c16-machine1-machine/machine1-undefined-mean-: rgb(78, 145, 226)
+            temperature-machine_data-factory1-bf8c01700c16-machine2-machine/machine2-undefined-mean-: rgb(255, 126, 39)
+            temperature-machine_data-factory1-bf8c01700c16-machine3-machine/machine3-undefined-mean-: rgb(49, 192, 246)
+            temperature-machine_data-undefined-c8f22e76cdc9-machine1-machine/machine1-Bennett and Sons-mean-: rgb(232, 95, 70)
+            temperature-machine_data-undefined-c8f22e76cdc9-machine2-machine/machine2-Parker, Lambert and Alvarado-mean-: rgb(186, 54, 130)
+            temperature-machine_data-undefined-c8f22e76cdc9-machine3-machine/machine3-Boyd, Smith and Williams-mean-: rgb(209, 70, 101)
+            temperature-machine_data-undefined-e469ec892ef8-machine1-machine/machine1-Reese and Sons-mean-: rgb(134, 70, 182)
+            temperature-machine_data-undefined-e469ec892ef8-machine2-machine/machine2-Anderson, Williams and Andrews-mean-: rgb(161, 53, 158)
+            temperature-machine_data-undefined-e469ec892ef8-machine3-machine/machine3-Harris-Gallegos-mean-: rgb(106, 103, 205)
+          colorizeRows: true
+          colors:
+            - hex: '#31C0F6'
+              id: y5gMaI_qULQEbZMk7QnDs
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#A500A5'
+              id: nC5Jo5rcfGM2ZXeDsH2yU
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#FF7E27'
+              id: XJx7Lu-q4SGZv0MYBzsMQ
+              name: Nineteen Eighty Four
+              type: scale
+          geom: line
+          height: 3
+          hoverDimension: auto
+          kind: Xy
+          legendColorizeRows: true
+          legendOpacity: 1
+          legendOrientationThreshold: 1e+08
+          name: Temperature
+          opacity: 1
+          orientationThreshold: 1e+08
+          position: overlaid
+          queries:
+            - query: |-
+                from(bucket: "global")
+                  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_data")
+                  |> filter(fn: (r) => r["_field"] == "temperature")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+          staticLegend:
+            colorizeRows: true
+            opacity: 1
+            orientationThreshold: 1e+08
+            widthRatio: 1
+          width: 2
+          widthRatio: 1
+          xCol: _time
+          xPos: 4
+          yCol: _value
+          yPos: 1
+        - axes:
+            - base: "10"
+              name: x
+              scale: linear
+            - base: "10"
+              name: "y"
+              scale: linear
+          colorMapping:
+            vibration-machine_data-bf8c01700c16-machine1-undefined-machine/machine1-factory1-mean-: rgb(78, 145, 226)
+            vibration-machine_data-bf8c01700c16-machine2-undefined-machine/machine2-factory1-mean-: rgb(134, 70, 182)
+            vibration-machine_data-bf8c01700c16-machine3-undefined-machine/machine3-factory1-mean-: rgb(232, 95, 70)
+            vibration-machine_data-c8f22e76cdc9-machine1-Bennett and Sons-machine/machine1-undefined-mean-: rgb(106, 103, 205)
+            vibration-machine_data-c8f22e76cdc9-machine2-Parker, Lambert and Alvarado-machine/machine2-undefined-mean-: rgb(209, 70, 101)
+            vibration-machine_data-c8f22e76cdc9-machine3-Boyd, Smith and Williams-machine/machine3-undefined-mean-: rgb(186, 54, 130)
+            vibration-machine_data-e469ec892ef8-machine1-Reese and Sons-machine/machine1-undefined-mean-: rgb(49, 192, 246)
+            vibration-machine_data-e469ec892ef8-machine2-Anderson, Williams and Andrews-machine/machine2-undefined-mean-: rgb(255, 126, 39)
+            vibration-machine_data-e469ec892ef8-machine3-Harris-Gallegos-machine/machine3-undefined-mean-: rgb(161, 53, 158)
+          colorizeRows: true
+          colors:
+            - hex: '#31C0F6'
+              id: y5gMaI_qULQEbZMk7QnDs
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#A500A5'
+              id: nC5Jo5rcfGM2ZXeDsH2yU
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#FF7E27'
+              id: XJx7Lu-q4SGZv0MYBzsMQ
+              name: Nineteen Eighty Four
+              type: scale
+          geom: line
+          height: 4
+          hoverDimension: auto
+          kind: Xy
+          legendColorizeRows: true
+          legendOpacity: 1
+          legendOrientationThreshold: 1e+08
+          name: Vibration
+          opacity: 1
+          orientationThreshold: 1e+08
+          position: overlaid
+          queries:
+            - query: |-
+                from(bucket: "global")
+                  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_data")
+                  |> filter(fn: (r) => r["_field"] == "vibration")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+          staticLegend:
+            colorizeRows: true
+            opacity: 1
+            orientationThreshold: 1e+08
+            widthRatio: 1
+          width: 6
+          widthRatio: 1
+          xCol: _time
+          xPos: 6
+          yCol: _value
+        - axes:
+            - name: x
+            - name: "y"
+          colors:
+            - hex: '#31C0F6'
+            - hex: '#BC00B8'
+            - hex: '#FF7E27'
+          height: 5
+          kind: Mosaic
+          legendColorizeRows: true
+          legendOpacity: 1
+          legendOrientationThreshold: 1e+08
+          name: Machine Operational State
+          queries:
+            - query: "// Place holder code. \n from(bucket: \"global\")\n  |> range(start: -10s)\n  |> limit(n: 1)"
+          staticLegend: {}
+          width: 6
+          xPos: 6
+          yLabelColumns:
+            - machineID
+          yPos: 5
+        - colors:
+            - hex: '#ffffff'
+              id: base
+              name: white
+              type: text
+          height: 2
+          kind: Table
+          name: Machine State Percentage
+          queries:
+            - query: "// Place holder code. \n from(bucket: \"global\")\n  |> range(start: -10s)\n  |> limit(n: 1)"
+          staticLegend: {}
+          tableOptions:
+            verticalTimeAxis: true
+          timeFormat: YYYY-MM-DD HH:mm:ss
+          width: 6
+          xPos: 6
+          yPos: 10
+        - axes:
+            - base: "10"
+              name: x
+              scale: linear
+            - base: "10"
+              name: "y"
+              scale: linear
+          colorMapping: {}
+          colorizeRows: true
+          colors:
+            - hex: '#31C0F6'
+              id: 1ewlIsBwPbghueXtC_Fj3
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#A500A5'
+              id: 67PNQFavVtkKWZipvcN5W
+              name: Nineteen Eighty Four
+              type: scale
+            - hex: '#FF7E27'
+              id: kvvSw6aDdKUdyLCEcRrd5
+              name: Nineteen Eighty Four
+              type: scale
+          geom: line
+          height: 6
+          hoverDimension: auto
+          kind: Xy
+          legendColorizeRows: true
+          legendOpacity: 1
+          legendOrientationThreshold: 1e+08
+          name: Vibration Anomalies
+          opacity: 1
+          orientationThreshold: 1e+08
+          position: overlaid
+          queries:
+            - query: "// Place holder code. \n from(bucket: \"global\")\n  |> range(start: -10s)\n  |> limit(n: 1)"
+          staticLegend:
+            colorizeRows: true
+            opacity: 1
+            orientationThreshold: 1e+08
+            widthRatio: 1
+          width: 6
+          widthRatio: 1
+          xPos: 6
+          yPos: 13
+    description: InfluxDays University Challange dashboard
+    name: Factory Global
